@@ -118,7 +118,7 @@ defaults = dict(
     retract_speed=30,
     retract_restart_extra=0,
     retract_before_travel=2,
-    retract_lift=0,
+    retract_lift=0.0,
     retract_layer_change=True,
     #wipe=False,
 
@@ -211,6 +211,7 @@ class Profile(object):
 
 				if not key in defaults.keys():
 					# unknown profile settings, we'll ignore that
+					logging.getLogger("octoprint.plugins.slic3r.engine").debug("Unknown slic3r parameter: " + key + " = " + v)
 					continue
 
 				result[key] = cls.convert_value(key, v, defaults[key])
@@ -244,26 +245,29 @@ class Profile(object):
 					return str(value)
 				else:
 					return float(value)
-			elif isinstance(default, bool):
-				return bool(value)
-			elif isinstance(default, int):
-				return int(value)
-			elif isinstance(default, float):
-				return float(value)
-			elif isinstance(default, (list, tuple)):
+			#elif sep in value:
+			#	 logging.getLogger("octoprint.plugins.slic3r.engine").debug("Array : " + key + " + " + value)
+			elif isinstance(default, (list, tuple)) or sep in value:
 				result = []
 
 				parts = value.split(sep)
-				if len(parts) > len(default):
-					parts = parts[:len(default)]
+				#if len(parts) > len(default):
+				#	parts = parts[:len(default)]
 
-				for i, d in enumerate(default):
+				for i, d in enumerate(parts):
 					if i >= len(parts):
 						result.append(d)
 					else:
 						result.append(cls.convert_value(key, parts[i], d))
 
 				return result
+
+			elif isinstance(default, bool):
+				return bool(value)
+			elif isinstance(default, int):
+				return int(value)
+			elif isinstance(default, float):
+				return float(value)
 			else:
 				return str(value)
 		except:
