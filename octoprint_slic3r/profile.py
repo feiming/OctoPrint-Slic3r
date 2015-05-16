@@ -146,7 +146,6 @@ defaults = dict(
     duplicate=1,
     duplicate_grid=(1,1), # TODO ?!
     duplicate_distance=6,
-    xy_size_compensation=0,
 
     complete_objects=False,
     extruder_clearance_radius=20,
@@ -158,7 +157,6 @@ defaults = dict(
     extrusion_width="100%",
     first_layer_extrusion_width="100%",
     perimeter_extrusion_width="100%",
-    external_perimeter_extrusion_width="100%",
     infill_extrusion_width="100%",
     solid_infill_extrusion_width="100%",
     top_infill_extrusion_width="100%",
